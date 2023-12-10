@@ -68,15 +68,15 @@ public extension CollectionReference {
     }
     
     /// Get existing documents via Query.
-    func getDocumentsQuery<T:Codable>(query: @escaping (CollectionReference) -> Query) async throws -> [T] {
-        let updatedQuery = query(self)
-        return try await updatedQuery.getDocuments(as: [T].self)
-    }
+//    func getDocumentsQuery<T:Codable>(query: @escaping (CollectionReference) -> Query) async throws -> [T] {
+//        let updatedQuery = query(self)
+//        return try await updatedQuery.getDocuments(as: [T].self)
+//    }
     
     /// Get all existing documents.
-    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
-        try await self.getDocuments(as: [T].self)
-    }
+//    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
+//        try await self.getDocuments(as: [T].self)
+//    }
     
     /// Add listener to document and stream changes to document.
     func streamDocument<T:Codable>(id: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {

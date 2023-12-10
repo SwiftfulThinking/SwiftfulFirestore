@@ -8,6 +8,15 @@
 import Foundation
 import FirebaseFirestore
 
+public extension Query {
+    
+    /// Get all existing documents.
+    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
+        try await self.getDocuments(as: [T].self)
+    }
+    
+}
+
 extension Query {
     
     enum QueryError: Error {
