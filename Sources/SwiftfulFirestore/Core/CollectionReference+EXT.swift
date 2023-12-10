@@ -12,25 +12,25 @@ public extension CollectionReference {
     
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable>(id: String, document: T) async throws {
-        let dict = try document.asDictionary()
+        let dict = try document.asJsonDictionary()
         try await self.document(id).setData(dict, merge: true)
     }
     
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable & IdentifiableByString>(document: T) async throws {
-        let dict = try document.asDictionary()
+        let dict = try document.asJsonDictionary()
         try await self.document(document.id).setData(dict, merge: true)
     }
     
     /// Update existing document.
     func updateDocument<T:Codable>(id: String, document: T) async throws {
-        let dict = try document.asDictionary()
+        let dict = try document.asJsonDictionary()
         try await self.document(id).updateData(dict)
     }
     
     /// Update existing document.
     func updateDocument<T:Codable & IdentifiableByString>(document: T) async throws {
-        let dict = try document.asDictionary()
+        let dict = try document.asJsonDictionary()
         try await self.document(document.id).updateData(dict)
     }
     
