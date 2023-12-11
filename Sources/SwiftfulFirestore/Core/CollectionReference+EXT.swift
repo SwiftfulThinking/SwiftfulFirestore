@@ -12,14 +12,12 @@ public extension CollectionReference {
     
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable>(id: String, document: T) async throws {
-        let dict = try document.asJsonDictionary()
-        try await self.document(id).setData(dict, merge: true)
+        try self.document(id).setData(from: document, merge: true)
     }
     
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable & IdentifiableByString>(document: T) async throws {
-        let dict = try document.asJsonDictionary()
-        try await self.document(document.id).setData(dict, merge: true)
+        try self.document(document.id).setData(from: document, merge: true)
     }
     
     /// Create or overwrite document. Merge: TRUE
@@ -28,17 +26,19 @@ public extension CollectionReference {
     }
     
     /// Update existing document.
+    // Deprecate?
     func updateDocument<T:Codable>(id: String, document: T) async throws {
         let dict = try document.asJsonDictionary()
         try await self.document(id).updateData(dict)
     }
     
     /// Update existing document.
-    func updateDocument<T:Codable & IdentifiableByString>(document: T) async throws {
-        let dict = try document.asJsonDictionary()
-        try await self.document(document.id).updateData(dict)
-    }
+//    func updateDocument<T:Codable & IdentifiableByString>(document: T) async throws {
+//        let dict = try document.asJsonDictionary()
+//        try await self.document(document.id).updateData(dict)
+//    }
     
+    // Deprecate?
     /// Update existing document.
     func updateDocument(id: String, dict: [String:Any]) async throws {
         try await self.document(id).updateData(dict)
