@@ -25,12 +25,27 @@ public protocol DatabaseHelperProtocol {
     func deleteAllDocuments() async throws
 }
 
-public struct DatabaseHelper<T:DatabaseHelperProtocol> {
+public struct DatabaseHelper {
     
-    private let provider: T
+    private let provider: any DatabaseHelperProtocol
     
-    public init(provider: T) {
+    public init(provider: any DatabaseHelperProtocol) {
         self.provider = provider
     }
     
+    public init<T:Codable & IdentifiableByString>(config: DatabaseConfiguration<T>) {
+        
+        switch config {
+        case .mock(let startingData, _):
+            self.provider = MockDatabaseHelper(startingData: startingData ?? [])
+        case .firebase(let collection, let type):
+            self.provider = FirebaseDatabaseHelper(collection: collection, type: type)
+        }
+    }
+    
+}
+
+
+public enum DatabaseConfiguration<T: Codable & IdentifiableByString> {
+    case mock(startingData: [T]?, type: T.Type), firebase(collection: String, type: T.Type)
 }
