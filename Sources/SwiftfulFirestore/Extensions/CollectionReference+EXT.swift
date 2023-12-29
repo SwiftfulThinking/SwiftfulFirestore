@@ -10,6 +10,11 @@ import FirebaseFirestore
 
 public extension CollectionReference {
     
+//    func createDocument<T:IdentifiableByString>() async throws -> String {
+//        let doc = self.document()
+//        let item = T.ID
+//    }
+
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable>(id: String, document: T) async throws {
         try self.document(id).setData(from: document, merge: true)
