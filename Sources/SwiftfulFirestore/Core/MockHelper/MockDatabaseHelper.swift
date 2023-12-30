@@ -18,12 +18,12 @@ struct MockDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelperPro
 
     /// Create or overwrite document. Merge: TRUE
     func setDocument(id: String, document: T) async throws {
-        try await database.setDocument(document: document)
+        await database.setDocument(document: document)
     }
     
     /// Create or overwrite document. Merge: TRUE
     func setDocument(document: T) async throws {
-        try await database.setDocument(document: document)
+        await database.setDocument(document: document)
     }
     
     /// Get existing document.
@@ -33,12 +33,16 @@ struct MockDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelperPro
     
     /// Get existing documents.
     func getDocuments(ids: [String]) async throws -> [T] {
-        try await database.getDocuments(ids: ids)
+        await database.getDocuments(ids: ids)
     }
     
     /// Get existing documents via Query.
     func getDocumentsQuery(query: @escaping (CollectionReference) -> Query) async throws -> [T] {
-        try await database.getDocumentsQuery(query: query)
+        await database.getDocumentsQuery(query: query)
+    }
+    
+    func getAllDocuments() async throws -> [T] {
+        await database.getAllDocuments()
     }
     
     /// Add listener to document and stream changes to document.
@@ -67,17 +71,17 @@ struct MockDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelperPro
         
     /// Delete document.
     func deleteDocument(id: String) async throws {
-        try await database.deleteDocument(id: id)
+        await database.deleteDocument(id: id)
     }
     
     /// Delete array of documents.
     func deleteDocuments(ids: [String]) async throws {
-        try await database.deleteDocuments(ids: ids)
+        await database.deleteDocuments(ids: ids)
     }
     
     /// Delete all documents.
     func deleteAllDocuments() async throws {
-        try await database.deleteAllDocuments()
+        await database.deleteAllDocuments()
     }
 
 }
