@@ -18,10 +18,12 @@ actor MockDatabase<T : Codable & IdentifiableByString> {
     
     func setDocument(id: String, document: T) {
         data[id] = document
+        print("did set 1 :: \(data.count)")
     }
     
     func setDocument(document: T) {
         data[document.id] = document
+        print("did set 2 :: \(data.count)")
     }
         
     func getDocument(id: String) throws -> T {

@@ -105,6 +105,7 @@ struct AnyDatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtoc
 
 }
 
+
 public enum DatabaseConfiguration<T: Codable & IdentifiableByString> {
     case mock(startingData: [T]?, type: T.Type), firebase(collection: String, type: T.Type)
 }
