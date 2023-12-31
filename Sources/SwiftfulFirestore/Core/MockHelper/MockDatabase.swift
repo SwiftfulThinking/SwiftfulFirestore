@@ -10,7 +10,11 @@ import FirebaseFirestore
 
 actor MockDatabase<T : Codable & IdentifiableByString> {
     
-    @Published private(set) var data: [String: T]
+    @Published private(set) var data: [String: T] {
+        didSet {
+            print("DATA SET: \(data.count)")
+        }
+    }
     
     init(data: [T]) {
         self._data = Published(wrappedValue: data.asDictionary())
