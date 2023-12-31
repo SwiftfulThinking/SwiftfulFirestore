@@ -26,6 +26,12 @@ struct MockDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelperPro
         await database.setDocument(document: document)
     }
     
+    func setDocuments(documents: [T]) async throws {
+        for document in documents {
+            await database.setDocument(document: document)
+        }
+    }
+    
     /// Get existing document.
     func getDocument(id: String) async throws -> T {
         try await database.getDocument(id: id)

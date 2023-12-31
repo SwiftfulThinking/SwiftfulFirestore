@@ -12,6 +12,7 @@ public protocol DatabaseHelperProtocol {
     associatedtype T = (Codable & IdentifiableByString)
     func setDocument(id: String, document: T) async throws
     func setDocument(document: T) async throws
+    func setDocuments(documents: [T]) async throws
     
     func getDocument(id: String) async throws -> T
     func getDocuments(ids: [String]) async throws -> [T]
@@ -29,6 +30,7 @@ public protocol DatabaseHelperProtocol {
 struct AnyDatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtocol {
     private let _setDocument: (String, T) async throws -> Void
     private let _setDocument2: (T) async throws -> Void
+    private let _setDocuments: ([T]) async throws -> Void
     
     private let _getDocument: (String) async throws -> T
     private let _getDocuments: ([String]) async throws -> [T]
@@ -45,6 +47,7 @@ struct AnyDatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtoc
     init<U:DatabaseHelperProtocol>(_ helper: U) where U.T == T {
         self._setDocument = helper.setDocument
         self._setDocument2 = helper.setDocument
+        self._setDocuments = helper.setDocuments
         
         self._getDocument = helper.getDocument
         self._getDocuments = helper.getDocuments
@@ -65,6 +68,10 @@ struct AnyDatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtoc
     
     func setDocument(document: T) async throws {
         try await _setDocument2(document)
+    }
+    
+    func setDocuments(documents: [T]) async throws {
+        try await _setDocuments(documents)
     }
     
     func getDocument(id: String) async throws -> T {
@@ -129,6 +136,10 @@ public struct DatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperPr
     
     public func setDocument(document: T) async throws {
         try await provider.setDocument(document: document)
+    }
+    
+    public func setDocuments(documents: [T]) async throws {
+        try await provider.setDocuments(documents: documents)
     }
     
     public func getDocument(id: String) async throws -> T {

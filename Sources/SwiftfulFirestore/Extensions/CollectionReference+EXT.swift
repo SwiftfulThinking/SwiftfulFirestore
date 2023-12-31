@@ -25,6 +25,18 @@ public extension CollectionReference {
         try self.document(document.id).setData(from: document, merge: true)
     }
     
+    func setDocuments<T:Codable & IdentifiableByString>(documents: [T]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for document in documents {
+                group.addTask {
+                    try await self.setDocument(document: document)
+                }
+            }
+            
+            try await group.waitForAll()
+        }
+    }
+    
     /// Create or overwrite document. Merge: TRUE
     func setDocument(id: String, dict: [String:Any]) async throws {
         try await self.document(id).setData(dict, merge: true)

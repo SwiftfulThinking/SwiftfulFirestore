@@ -28,6 +28,11 @@ struct FirebaseDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelpe
         try await collection.setDocument(document: document)
     }
     
+    /// Create or overwrite documents. Merge: TRUE
+    func setDocuments(documents: [T]) async throws {
+        try await collection.setDocuments(documents: documents)
+    }
+    
     /// Create or overwrite document. Merge: TRUE
 //    func setDocument(id: String, dict: [String:Any]) async throws {
 //        try await collection.setDocument(id: id, dict: dict)
