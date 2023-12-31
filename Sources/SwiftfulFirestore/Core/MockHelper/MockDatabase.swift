@@ -40,7 +40,8 @@ actor MockDatabase<T : Codable & IdentifiableByString> {
     
     func getDocumentsQuery(query: @escaping (CollectionReference) -> Query) -> [T] {
         // NOTE: Query does not work on MOCK data.
-        data.map({ $0.value })
+        print("GETTING DOCUMENTS: \(data.count)")
+        return data.map({ $0.value })
     }
     
     func getAllDocuments() -> [T] {
