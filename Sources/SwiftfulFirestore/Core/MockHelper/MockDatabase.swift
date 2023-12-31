@@ -8,26 +8,20 @@
 import Foundation
 import FirebaseFirestore
 
-actor MockDatabase<T : Codable & IdentifiableByString> {
+public actor MockDatabase<T : Codable & IdentifiableByString> {
     
-    @Published private(set) var data: [String: T] {
-        didSet {
-            print("DATA SET: \(data.count)")
-        }
-    }
+    @Published private(set) var data: [String: T]
     
-    init(data: [T]) {
+    public init(data: [T]) {
         self._data = Published(wrappedValue: data.asDictionary())
     }
     
     func setDocument(id: String, document: T) {
         data[id] = document
-        print("did set 1 :: \(data.count)")
     }
     
     func setDocument(document: T) {
         data[document.id] = document
-        print("did set 2 :: \(data.count)")
     }
         
     func getDocument(id: String) throws -> T {
@@ -44,8 +38,7 @@ actor MockDatabase<T : Codable & IdentifiableByString> {
     
     func getDocumentsQuery(query: @escaping (CollectionReference) -> Query) -> [T] {
         // NOTE: Query does not work on MOCK data.
-        print("GETTING DOCUMENTS: \(data.count)")
-        return data.map({ $0.value })
+        data.map({ $0.value })
     }
     
     func getAllDocuments() -> [T] {

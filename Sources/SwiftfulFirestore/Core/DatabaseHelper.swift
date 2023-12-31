@@ -107,7 +107,7 @@ struct AnyDatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtoc
 
 
 public enum DatabaseConfiguration<T: Codable & IdentifiableByString> {
-    case mock(startingData: [T]?, type: T.Type), firebase(collection: String, type: T.Type)
+    case mock(mock: MockDatabase<T>?, type: T.Type), firebase(collection: String, type: T.Type)
 }
 
 public struct DatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperProtocol {
@@ -116,8 +116,8 @@ public struct DatabaseHelper<T:Codable & IdentifiableByString>: DatabaseHelperPr
     public init(config: DatabaseConfiguration<T>) {
         
         switch config {
-        case .mock(let startingData, _):
-            self.provider = AnyDatabaseHelper(MockDatabaseHelper(startingData: startingData ?? []))
+        case .mock(let data, _):
+            self.provider = AnyDatabaseHelper(MockDatabaseHelper(database: data ?? MockDatabase(data: [])))
         case .firebase(let collection, let type):
             self.provider = AnyDatabaseHelper(FirebaseDatabaseHelper(collection: collection, type: type))
         }

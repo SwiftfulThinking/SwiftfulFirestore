@@ -12,8 +12,8 @@ struct MockDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelperPro
     
     private let database: MockDatabase<T>
 
-    init(startingData data: [T]) {
-        self.database = MockDatabase(data: data)
+    init(database: MockDatabase<T> = MockDatabase(data: [])) {
+        self.database = database
     }
 
     /// Create or overwrite document. Merge: TRUE
