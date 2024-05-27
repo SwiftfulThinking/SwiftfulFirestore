@@ -100,9 +100,9 @@ public extension CollectionReference {
 //        try await self.getDocuments(as: [T].self)
 //    }
     
-    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
-        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
-    }
+//    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
+//        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
+//    }
     
     /// Add listener to document and stream changes to document.
     func streamDocument<T:Codable>(id: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {

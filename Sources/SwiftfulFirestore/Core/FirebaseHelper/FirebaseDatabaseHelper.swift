@@ -74,7 +74,7 @@ struct FirebaseDatabaseHelper<T : Codable & IdentifiableByString>: DatabaseHelpe
     
     /// Get all existing documents.
     func getAllDocuments() async throws -> [T] {
-        try await collection.getAllDocuments()
+        try await collection.getAllDocuments(as: [T].self)
     }
     
 //    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {

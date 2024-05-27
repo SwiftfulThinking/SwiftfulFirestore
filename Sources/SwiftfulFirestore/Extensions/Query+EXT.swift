@@ -11,7 +11,7 @@ import FirebaseFirestore
 public extension Query {
     
     /// Get all existing documents.
-    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
+    func getAllDocuments<T:Codable & IdentifiableByString>(as type: [T].Type) async throws -> [T] {
         try await self.getDocuments(as: [T].self)
     }
     
