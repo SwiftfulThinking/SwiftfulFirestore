@@ -11,7 +11,7 @@ import FirebaseFirestore
 public extension Query {
     
     /// Get all existing documents.
-    func getAllDocuments<T:Codable & IdentifiableByString>(as type: [T].Type) async throws -> [T] {
+    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
         try await self.getDocuments(as: [T].self)
     }
     
@@ -21,6 +21,11 @@ extension Query {
     
     enum QueryError: Error {
         case noDocumentsFound
+    }
+    
+    func getDocuments<T:Codable & IdentifiableByString>() async throws -> [T] where T : Decodable {
+        let snapshot = try await self.getDocuments()
+        return try snapshot.documents.map({ try $0.data(as: T.self) })
     }
     
     func getDocuments<T>(as type: [T].Type) async throws -> [T] where T : Decodable {
