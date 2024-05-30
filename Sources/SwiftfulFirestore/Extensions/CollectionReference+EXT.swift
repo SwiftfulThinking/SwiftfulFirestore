@@ -105,13 +105,13 @@ public extension CollectionReference {
 //    }
     
     /// Add listener to document and stream changes to document.
-    func streamDocument<T:Codable>(id: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {
-        self.document(id).addSnapshotStream(as: T.self, onListenerConfigured: onListenerConfigured)
+    func streamDocument<T:Codable>(id: String, includeMetadataChanges: Bool = false, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {
+        self.document(id).addSnapshotStream(as: T.self, includeMetadataChanges: includeMetadataChanges, onListenerConfigured: onListenerConfigured)
     }
     
     /// Add listener to collection and stream changes to all documents.
-    func streamAllDocuments<T:Codable>(onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<[T], Error> {
-        self.addSnapshotStream(as: [T].self, onListenerConfigured: onListenerConfigured)
+    func streamAllDocuments<T:Codable>(includeMetadataChanges: Bool = false, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<[T], Error> {
+        self.addSnapshotStream(as: [T].self, includeMetadataChanges: includeMetadataChanges, onListenerConfigured: onListenerConfigured)
     }
         
     /// Delete document.
