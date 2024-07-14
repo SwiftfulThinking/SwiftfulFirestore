@@ -16,11 +16,11 @@ extension DocumentReference {
     
     // Note: similar to Query.addSnapshotStream
     
-    func addSnapshotStream<T>(as type: T.Type, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> where T : Decodable {
+    func addSnapshotStream<T>(as type: T.Type, includeMetadataChanges: Bool = false, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> where T : Decodable {
         var didConfigureListener: Bool = false
         
         let stream = AsyncThrowingStream(T.self) { continuation in
-            let listener = self.addSnapshotListener { documentSnapshot, error in
+            let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 guard error == nil else {
                     continuation.finish(throwing: error)
                     return

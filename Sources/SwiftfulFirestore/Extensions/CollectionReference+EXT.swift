@@ -10,6 +10,11 @@ import FirebaseFirestore
 
 public extension CollectionReference {
     
+//    func createDocument<T:IdentifiableByString>() async throws -> String {
+//        let doc = self.document()
+//        let item = T.ID
+//    }
+
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable>(id: String, document: T) async throws {
         try self.document(id).setData(from: document, merge: true)
@@ -18,6 +23,18 @@ public extension CollectionReference {
     /// Create or overwrite document. Merge: TRUE
     func setDocument<T:Codable & IdentifiableByString>(document: T) async throws {
         try self.document(document.id).setData(from: document, merge: true)
+    }
+    
+    func setDocuments<T:Codable & IdentifiableByString>(documents: [T]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for document in documents {
+                group.addTask {
+                    try await self.setDocument(document: document)
+                }
+            }
+            
+            try await group.waitForAll()
+        }
     }
     
     /// Create or overwrite document. Merge: TRUE
@@ -83,18 +100,18 @@ public extension CollectionReference {
 //        try await self.getDocuments(as: [T].self)
 //    }
     
-    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
-        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
-    }
+//    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
+//        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
+//    }
     
     /// Add listener to document and stream changes to document.
-    func streamDocument<T:Codable>(id: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {
-        self.document(id).addSnapshotStream(as: T.self, onListenerConfigured: onListenerConfigured)
+    func streamDocument<T:Codable>(id: String, includeMetadataChanges: Bool = false, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {
+        self.document(id).addSnapshotStream(as: T.self, includeMetadataChanges: includeMetadataChanges, onListenerConfigured: onListenerConfigured)
     }
     
     /// Add listener to collection and stream changes to all documents.
-    func streamAllDocuments<T:Codable>(onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<[T], Error> {
-        self.addSnapshotStream(as: [T].self, onListenerConfigured: onListenerConfigured)
+    func streamAllDocuments<T:Codable>(includeMetadataChanges: Bool = false, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<[T], Error> {
+        self.addSnapshotStream(as: [T].self, includeMetadataChanges: includeMetadataChanges, onListenerConfigured: onListenerConfigured)
     }
         
     /// Delete document.
