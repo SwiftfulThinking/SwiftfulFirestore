@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import IdentifiableByString
 
 public extension CollectionReference {
     
@@ -16,7 +17,7 @@ public extension CollectionReference {
     }
     
     /// Create or overwrite document. Merge: TRUE
-    func setDocument<T:Codable & IdentifiableByString>(document: T) async throws {
+    func setDocument<T:Codable & StringIdentifiable>(document: T) async throws {
         try self.document(document.id).setData(from: document, merge: true)
     }
     
@@ -73,19 +74,19 @@ public extension CollectionReference {
     }
     
     /// Get existing documents via Query.
-    func getDocumentsQuery<T:Codable>(query: @escaping (CollectionReference) -> Query) async throws -> [T] {
-        let updatedQuery = query(self)
-        return try await updatedQuery.getDocuments(as: [T].self)
-    }
+//    func getDocumentsQuery<T:Codable>(query: @escaping (CollectionReference) -> Query) async throws -> [T] {
+//        let updatedQuery = query(self)
+//        return try await updatedQuery.getDocuments(as: [T].self)
+//    }
     
     /// Get all existing documents.
 //    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
 //        try await self.getDocuments(as: [T].self)
 //    }
     
-    func getAllDocuments<T:Codable & IdentifiableByString>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
-        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
-    }
+//    func getAllDocuments<T:Codable & StringIdentifiable>(whereField field: String, isEqualTo filterValue: String) async throws -> [T] {
+//        try await self.whereField(field, isEqualTo: filterValue).getAllDocuments()
+//    }
     
     /// Add listener to document and stream changes to document.
     func streamDocument<T:Codable>(id: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<T, Error> {

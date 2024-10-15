@@ -1,7 +1,5 @@
 # SwiftfulFirestore 🏎️
 
-Package in Alpha.
-
 Convenience functions for using Firebase Firestore with Swift Concurrency.
 
 Most functions are an extension of CollectionReference.
@@ -17,9 +15,9 @@ Import the package to your project.
 import SwiftfulFirestore
 ```
 
-#### Conform to IdentifiableByString (optional).
+#### Conform to StringIdentifiable (optional).
 ```swift
-struct Movie: Codable, IdentifiableByString {
+struct Movie: Codable, StringIdentifiable {
     let id = UUID().uuidString
 }
 ```
@@ -41,7 +39,6 @@ try await collection.updateDocument(id: movie.id, dict: try movie.asJsonDictiona
 ```swift
 try await collection.getDocument(id: movie.id)
 try await collection.getDocuments(ids: [movie.id, movie.id])
-try await collection.whereField("x", isEqualTo: "x").getAllDocuments()
 try await collection.getAllDocuments()
 ```
 

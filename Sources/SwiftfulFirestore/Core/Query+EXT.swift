@@ -7,11 +7,12 @@
 
 import Foundation
 import FirebaseFirestore
+import IdentifiableByString
 
 public extension Query {
     
     /// Get all existing documents.
-    func getAllDocuments<T:Codable & IdentifiableByString>() async throws -> [T] {
+    func getAllDocuments<T:Codable & StringIdentifiable>() async throws -> [T] {
         try await self.getDocuments(as: [T].self)
     }
     
