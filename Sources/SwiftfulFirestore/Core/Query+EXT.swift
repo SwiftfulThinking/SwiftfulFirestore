@@ -32,10 +32,8 @@ extension Query {
     
     // Note: similar to DocumentReference.addSnapshotStream
 
-    func addSnapshotStream<T>(as type: [T].Type, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<[T], Error> where T : Decodable {
-        var didConfigureListener: Bool = false
-        
-        let stream = AsyncThrowingStream([T].self) { continuation in
+    func addSnapshotStream<T>(as type: [T].Type) -> AsyncThrowingStream<[T], Error> where T : Decodable {
+        AsyncThrowingStream([T].self) { continuation in
             let listener = self.addSnapshotListener { querySnapshot, error in
                 guard error == nil else {
                     continuation.finish(throwing: error)
@@ -55,12 +53,9 @@ extension Query {
                 }
             }
             
-            if !didConfigureListener {
-                didConfigureListener = true
-                onListenerConfigured(listener)
+            continuation.onTermination = { @Sendable _ in
+                listener.remove()
             }
         }
-        
-        return stream
     }
 }
