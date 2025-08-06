@@ -16,7 +16,7 @@ extension DocumentReference {
     
     // Note: similar to Query.addSnapshotStream
     
-    func addSnapshotStream<T>(as type: T.Type) -> AsyncThrowingStream<T, Error> where T : Decodable {
+    func addSnapshotStream<T>(as type: T.Type) -> AsyncThrowingStream<T, Error> where T : Decodable & Sendable {
         AsyncThrowingStream(T.self) { continuation in
             let listener = self.addSnapshotListener { documentSnapshot, error in
                 guard error == nil else {

@@ -12,7 +12,7 @@ import IdentifiableByString
 public extension Query {
     
     /// Get all existing documents.
-    func getAllDocuments<T:Codable & StringIdentifiable>() async throws -> [T] {
+    func getAllDocuments<T:Codable & StringIdentifiable & Sendable>() async throws -> [T] {
         try await self.getDocuments(as: [T].self)
     }
     
@@ -24,7 +24,7 @@ extension Query {
         case noDocumentsFound
     }
     
-    func getDocuments<T>(as type: [T].Type) async throws -> [T] where T : Decodable {
+    func getDocuments<T>(as type: [T].Type) async throws -> [T] where T : Decodable & Sendable {
         let snapshot = try await self.getDocuments()
         return try snapshot.documents.map({ try $0.data(as: T.self) })
     }
@@ -32,7 +32,7 @@ extension Query {
     
     // Note: similar to DocumentReference.addSnapshotStream
 
-    func addSnapshotStream<T>(as type: [T].Type) -> AsyncThrowingStream<[T], Error> where T : Decodable {
+    func addSnapshotStream<T>(as type: [T].Type) -> AsyncThrowingStream<[T], Error> where T : Decodable & Sendable {
         AsyncThrowingStream([T].self) { continuation in
             let listener = self.addSnapshotListener { querySnapshot, error in
                 guard error == nil else {
