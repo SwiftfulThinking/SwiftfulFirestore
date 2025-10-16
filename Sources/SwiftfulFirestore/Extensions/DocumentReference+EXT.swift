@@ -23,12 +23,18 @@ extension DocumentReference {
                     continuation.finish(throwing: error)
                     return
                 }
-                
+
                 guard let documentSnapshot else {
                     continuation.finish(throwing: DocumentError.noDocumentFound)
                     return
                 }
-                
+
+                // Skip if document doesn't exist - wait for server data
+                // This handles the case where cache says "doesn't exist" but server has data
+                guard documentSnapshot.exists else {
+                    return  // Don't terminate - wait for next snapshot
+                }
+
                 do {
                     let item = try documentSnapshot.data(as: T.self)
                     continuation.yield(item)
@@ -36,7 +42,7 @@ extension DocumentReference {
                     continuation.finish(throwing: error)
                 }
             }
-            
+
             continuation.onTermination = { @Sendable _ in
                 listener.remove()
             }
