@@ -92,15 +92,6 @@ public extension CollectionReference {
     func streamDocument<T:Codable>(id: String) -> AsyncThrowingStream<T, Error> {
         self.document(id).addSnapshotStream(as: T.self)
     }
-    
-    /// Add listener to collection and stream changes to all documents.
-    func streamAllDocuments<T:Codable>() -> AsyncThrowingStream<[T], Error> {
-        self.addSnapshotStream(as: [T].self)
-    }
-    
-    func streamAllDocumentChanges<T: Codable & Sendable>() -> AsyncThrowingStream<DocumentChange<T>, Error> {
-        self.addSnapshotStreamForChanges()
-    }
 
     /// Delete document.
     func deleteDocument(id: String) async throws {
