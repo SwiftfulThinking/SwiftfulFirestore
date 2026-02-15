@@ -10,12 +10,22 @@ import FirebaseFirestore
 import IdentifiableByString
 
 public extension Query {
-    
+
     /// Get all existing documents.
     func getAllDocuments<T:Codable & StringIdentifiable>() async throws -> [T] {
         try await self.getDocuments(as: [T].self)
     }
-    
+
+    /// Add listener to query and stream changes to all matching documents.
+    func streamAllDocuments<T:Codable>() -> AsyncThrowingStream<[T], Error> {
+        self.addSnapshotStream(as: [T].self)
+    }
+
+    /// Add listener to query and stream individual document changes.
+    func streamAllDocumentChanges<T: Codable & Sendable>() -> AsyncThrowingStream<DocumentChange<T>, Error> {
+        self.addSnapshotStreamForChanges()
+    }
+
 }
 
 extension Query {
