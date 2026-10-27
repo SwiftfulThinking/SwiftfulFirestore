@@ -16,7 +16,7 @@ let package = Package(
             targets: ["SwiftfulFirestore"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.0.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "13.0.0"),
         .package(url: "https://github.com/SwiftfulThinking/IdentifiableByString.git", from: "1.0.0")
     ],
     targets: [
